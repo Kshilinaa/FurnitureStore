@@ -3,7 +3,6 @@
 //  FurnitureStore
 
 import Foundation
-
 struct Furniture: Hashable {
     /// Название мебели
     let name: String

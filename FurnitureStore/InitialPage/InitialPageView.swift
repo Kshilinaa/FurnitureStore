@@ -18,39 +18,31 @@ struct InitialPageView: View {
     
     // MARK: - State
     @State private var isShowingLoginView = false
+    @State private var isShowingMainTabView = false
     
     // MARK: - Body
     var body: some View {
-        NavigationView {
-            ZStack {
-                creatingAGradient
-                VStack {
-                    upperTitle
-                    asyncImageView
-                    Spacer().frame(height: 110)
-                    Button(action: {
-                        isShowingLoginView = true
-                    }) {
-                        Text(Constants.getStartedButtonTitle)
-                            .fontWeight(.heavy)
-                            .font(.system(size: 20))
-                            .foregroundStyle(LinearGradient(colors: [Color("bottomGradient"), Color("topGragient")], startPoint: .top, endPoint: .bottom))
+            NavigationView {
+                ZStack {
+                    creatingAGradient
+                    VStack {
+                        upperTitle
+                        asyncImageView
+                        Spacer().frame(height: 110)
+                        getStartedButton
+                        Spacer().frame(height: 70)
+                        havingAnAccountTitle
+                        singInButton
                     }
-                    .tint(.white)
-                    .frame(width: 300, height: 55)
-                    .background(Color.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 27))
-                    .shadow(radius: 5, x: 0.0, y: 10.0)
-                    Spacer().frame(height: 70)
-                    havingAnAccountTitle
-                    singInButton
-                }
-                .fullScreenCover(isPresented: $isShowingLoginView) {
-                    LoginView()
+                    .fullScreenCover(isPresented: $isShowingLoginView) {
+                        LoginView()
+                    }
+                    .fullScreenCover(isPresented: $isShowingMainTabView) {
+                        MainTabView()
+                    }
                 }
             }
         }
-    }
     // MARK: - Visual Components
     private var asyncImageView: some View {
         AsyncImage(url: URL(string: "https://source.unsplash.com/401x401/?armchair")) { image in
@@ -88,6 +80,21 @@ struct InitialPageView: View {
                 .padding(.top, -12)
         }
         .padding(.top, 12)
+    }
+    private var getStartedButton: some View {
+        Button(action: {
+            isShowingMainTabView = true
+        }) {
+            Text(Constants.getStartedButtonTitle)
+                .fontWeight(.heavy)
+                .font(.system(size: 20))
+                .foregroundStyle(LinearGradient(colors: [Color("bottomGradient"), Color("topGragient")], startPoint: .top, endPoint: .bottom))
+        }
+        .tint(.white)
+        .frame(width: 300, height: 55)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 27))
+        .shadow(radius: 5, x: 0.0, y: 10.0)
     }
 }
 
