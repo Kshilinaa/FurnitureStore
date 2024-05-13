@@ -8,7 +8,7 @@ class DetailViewModel: ObservableObject {
     //MARK: - Constants
     private enum Constants {
         static let sofaTitle = "Sofa Elda 900"
-        static let imageName = "yellowSofa"
+        static let imageName = "sofa"
         static let descriptionTitle = "A sofa in a modern style is furniture without lush ornate decor.It has\na simple or even futuristic appearance and sleek design."
         static let reviewTitle = "This sofa looks great"
         static let article = 283564

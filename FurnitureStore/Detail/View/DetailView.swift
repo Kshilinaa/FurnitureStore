@@ -21,6 +21,7 @@ struct DetailView: View {
     @State private var isFavorite = false
     @State private var review = ""
     @State private var offset = 0
+    @State private var scale: CGFloat = 1
     @FocusState private var focused
     @ObservedObject var detailViewModel = DetailViewModel()
     @Environment(\.dismiss) private var dismiss
@@ -34,10 +35,20 @@ struct DetailView: View {
             descriptionView
             
         }
+        .gesture(
+            MagnificationGesture()
+                .onChanged { value in
+                    scale = value
+                }
+                .onEnded { value in
+                    scale = 1.0
+                }
+        )
         .onTapGesture {
             focused = false
         }
         .ignoresSafeArea(.keyboard)
+        .animation(.default)
     }
     // MARK: - Visual Components
     private var productName: some View {
@@ -58,6 +69,8 @@ struct DetailView: View {
     
     private var productImg: some View {
         Image(detailViewModel.furniture[0].imageName)
+            .aspectRatio(contentMode: .fit)
+            .scaleEffect(scale)
     }
     
     private var productPrice: some View {

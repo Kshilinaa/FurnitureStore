@@ -108,14 +108,12 @@ struct VerificationView: View {
     }
 
     private var continueButton: some View {
-        Button(action: {
-
-        }, label: {
+        NavigationLink(destination: MainTabView().navigationBarBackButtonHidden(true)) {
             Text(Constants.continueButtonTitle)
                 .fontWeight(.heavy)
                 .font(.system(size: 23))
                 .foregroundColor(.white)
-        })
+        }
         .frame(width: 300, height: 55)
         .background(LinearGradient(colors: [Color(Constants.bottomGradient), Color(Constants.topGragient)], startPoint: .leading, endPoint: .trailing))
         .clipShape(RoundedRectangle(cornerRadius: 27))

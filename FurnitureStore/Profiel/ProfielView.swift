@@ -7,9 +7,10 @@
 import SwiftUI
 /// Экран профиля пользователя
 struct ProfileView: View {
-    
+   
     @ObservedObject var profileViewModel = ProfileViewModel()
-    // MARK: - Bbody
+    
+    // MARK: - Body
     var body: some View {
         NavigationView {
             ZStack {
@@ -19,7 +20,7 @@ struct ProfileView: View {
                     Spacer()
                         .frame(height: 50)
                     Rectangle()
-                        .fill(.white)
+                        .fill(Color.white)
                         .ignoresSafeArea()
                         .overlay {
                             VStack {
@@ -27,13 +28,16 @@ struct ProfileView: View {
                                 Spacer()
                                     .frame(height: 47)
                                 settingsList
+                            }
                         }
-                            
-                    }
                 }
             }
+            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true) // Hide back button
+            .accentColor(.white) // Make back button white
         }
     }
+    
     // MARK: - Visual Components
     private var profileInfo: some View {
         VStack {
@@ -46,7 +50,7 @@ struct ProfileView: View {
                 .font(.system(size: 24, weight: .heavy))
                 .foregroundStyle(Color("textColor"))
             HStack {
-                Image(.point)
+                Image(systemName: "point")
                 Text("Moscow")
             }
         }
@@ -55,7 +59,6 @@ struct ProfileView: View {
     
     private var settingsList: some View {
         List(profileViewModel.allSettings, id: \.name) { setting in
-            
             makeSettingCellView(setting: setting)
         }
         .listStyle(.plain)
@@ -64,28 +67,26 @@ struct ProfileView: View {
     
     private func makeSettingCellView(setting: Setting) -> some View {
         ZStack {
-            NavigationLink(destination: {
-                Text("Account/Payment")
-            }) {
+            NavigationLink(destination: PaymentView()) {
                 Rectangle()
             }
             .opacity(0)
             
             HStack {
-                Image(setting.iconName)
+                Image(systemName: setting.iconName)
                 Text(setting.name)
                 Spacer()
-                Image(setting.badge ?? "")
-                
+                if let badge = setting.badge {
+                    Image(badge)
+                }
             }
             .foregroundStyle(Color("textColor"))
         }
     }
 }
 
-struct ProfielViewPreviews: PreviewProvider {
+struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileView()
     }
 }
-

@@ -27,6 +27,7 @@
 		5E5C6D862BECDA2600AE9ECA /* CatalogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E5C6D852BECDA2600AE9ECA /* CatalogViewModel.swift */; };
 		5E5C6D8A2BED7C9900AE9ECA /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E5C6D892BED7C9900AE9ECA /* FilterView.swift */; };
 		5E5C6D8C2BED7CE600AE9ECA /* FilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E5C6D8B2BED7CE600AE9ECA /* FilterViewModel.swift */; };
+		5ED45B3A2BEE4C6A0099438E /* PaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED45B392BEE4C6A0099438E /* PaymentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		5E5C6D852BECDA2600AE9ECA /* CatalogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewModel.swift; sourceTree = "<group>"; };
 		5E5C6D892BED7C9900AE9ECA /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		5E5C6D8B2BED7CE600AE9ECA /* FilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewModel.swift; sourceTree = "<group>"; };
+		5ED45B392BEE4C6A0099438E /* PaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +192,7 @@
 				5E5C6D7A2BECD5E000AE9ECA /* ProfileViewModel.swift */,
 				5E5C6D782BECD5B600AE9ECA /* Setting.swift */,
 				5E5C6D742BEBBE8C00AE9ECA /* ProfielView.swift */,
+				5EFFA4522BF1885E0006BB0E /* Payment */,
 			);
 			path = Profiel;
 			sourceTree = "<group>";
@@ -267,6 +270,14 @@
 				5E5C6D832BECDA0300AE9ECA /* ProductCard.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		5EFFA4522BF1885E0006BB0E /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				5ED45B392BEE4C6A0099438E /* PaymentView.swift */,
+			);
+			path = Payment;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -350,6 +361,7 @@
 				5E5C6D862BECDA2600AE9ECA /* CatalogViewModel.swift in Sources */,
 				5E5C6D842BECDA0300AE9ECA /* ProductCard.swift in Sources */,
 				5E5C6D8C2BED7CE600AE9ECA /* FilterViewModel.swift in Sources */,
+				5ED45B3A2BEE4C6A0099438E /* PaymentView.swift in Sources */,
 				5E5C6D8A2BED7C9900AE9ECA /* FilterView.swift in Sources */,
 				5E5C6D792BECD5B600AE9ECA /* Setting.swift in Sources */,
 				5E5C6D752BEBBE8C00AE9ECA /* ProfielView.swift in Sources */,

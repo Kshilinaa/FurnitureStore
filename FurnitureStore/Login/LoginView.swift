@@ -23,20 +23,25 @@ struct LoginView: View {
         static let bottomGradient = "bottomGradient"
         static let topGragient = "topGragient"
         static let textColor = "textColor"
-            }
-    /// Состояния
+    }
+    
+    // Состояния
     @State private var phone = ""
-    @State private var password = ""
+    @State private var passwordText = ""
     @State private var isSecure = true
     @State private var shouldShowAlert = false
-    @State private var inputText: String = ""
     @State private var isShowDetailView = false
-    @State private var isShowLoginView = false
+    @State private var isErrorShaking = false
+    @State private var loginError = false
+    
     @FocusState private var loginFocused
     @FocusState private var passwordFocused
+    
+    // Error state
+    @State private var errorOpacity: Double = 0.0
+    
     //MARK: - Body
     var body: some View {
-        
         NavigationStack {
             ZStack {
                 LinearGradient(colors: [.topGragient, .bottomGradient], startPoint: .leading, endPoint: .trailing)
@@ -72,17 +77,16 @@ struct LoginView: View {
                     loginFocused = false
                     passwordFocused = false
                 }
+                if loginError {
+                    errorView
+                        .opacity(errorOpacity)
+                        .animation(.linear(duration: 0.5))
+                }
             }
         }
     }
+    
     // MARK: - Visual Components
-    private var gradientPanel: some View {
-        HStack {
-            LinearGradient(colors: [.topGragient, .bottomGradient], startPoint: .leading, endPoint: .trailing)
-                .ignoresSafeArea()
-        }
-        .frame(maxWidth: .infinity, maxHeight: 80)
-    }
     
     private var loginAnddSignUpView: some View {
         HStack(spacing: 0) {
@@ -107,8 +111,7 @@ struct LoginView: View {
     private var formatLoginView: some View {
         VStack(spacing: 24) {
             VStack(spacing: 12) {
-                
-                            TextField("Phone number", text: $phone)
+                TextField("Phone number", text: $phone)
                     .focused($loginFocused)
                     .onReceive(phone.publisher.collect()) {
                         self.phone = formatPhoneNumber(
@@ -120,23 +123,23 @@ struct LoginView: View {
                         }
                     }
                     .keyboardType(.phonePad)
+                    .modifier(ShakeEffect(shake: isErrorShaking))
                 Divider()
             }
-            
             
             VStack(spacing: 12) {
                 Text(Constants.pasword)
                     .font(.system(size: 16))
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    
+                
                 HStack {
                     if isSecure {
-                        SecureField(Constants.paswordPlaceholder, text: $password)
+                        SecureField(Constants.paswordPlaceholder, text: $passwordText)
                             .focused($passwordFocused)
-                            
+                        
                     } else {
-                        TextField(Constants.paswordPlaceholder, text: $password)
+                        TextField(Constants.paswordPlaceholder, text: $passwordText)
                             .focused($passwordFocused)
                     }
                     
@@ -156,22 +159,23 @@ struct LoginView: View {
     }
     
     private func formatPhoneNumber(with mask: String, phone: String) -> String {
-            let numbers = phone.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
-            var result = ""
-            var index = numbers.startIndex
-            for ch in mask where index < numbers.endIndex {
-                if ch == "X" {
-                    result.append(numbers[index])
-                    index = numbers.index(after: index)
-                } else {
-                    result.append(ch)
-                }
+        let numbers = phone.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
+        var result = ""
+        var index = numbers.startIndex
+        for ch in mask where index < numbers.endIndex {
+            if ch == "X" {
+                result.append(numbers[index])
+                index = numbers.index(after: index)
+            } else {
+                result.append(ch)
             }
-            return result
         }
+        return result
+    }
+    
     private var singUpButton: some View {
         Button(action: {
-            isShowDetailView.toggle()
+            checkCredentials()
         }, label: {
             Text(Constants.regestrationButtonTitle)
                 .fontWeight(.heavy)
@@ -183,9 +187,6 @@ struct LoginView: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: 27))
         .shadow(color: .gray, radius: 2, x: 0.0, y: 4.0)
-        .fullScreenCover(isPresented: $isShowDetailView, content: {
-            DetailView()
-        })
     }
     
     private var forgotPasswordButton: some View {
@@ -206,7 +207,7 @@ struct LoginView: View {
         VStack(spacing: 18) {
             forgotPasswordButton
             VStack(spacing: 6) {
-                NavigationLink(destination: VerificationView()) {
+                NavigationLink(destination: VerificationView().navigationBarBackButtonHidden(true), isActive: $isShowDetailView) {
                     Text(Constants.verificationTitle)
                         .fontWeight(.heavy)
                         .font(.system(size: 20))
@@ -218,10 +219,63 @@ struct LoginView: View {
         }
     }
     
+    private var errorView: some View {
+        VStack {
+            Spacer()
+            Image("sadSmile")
+                .resizable()
+                .frame(width: 50, height: 50)
+            Spacer()
+                .frame(height: 10)
+            Text("Неверный логин или пароль,\n проверьте еще раз!")
+                .font(.custom("Verdana", size: 15))
+                .foregroundStyle(.black)
+            Spacer()
+                .frame(height: 10)
+        }
+        .opacity(errorOpacity)
+        .foregroundStyle(.black)
+        .padding()
+        .animation(.linear(duration: 0.5))
+    }
     
+    private func checkCredentials() {
+        let number = "+7 999 999 99 99"
+        let password = "1234"
+        if phone != number || passwordText != password {
+            withAnimation {
+                isErrorShaking = true
+                loginError = true
+                errorOpacity = 1.0
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                    isErrorShaking = false
+                    loginError = false
+                    errorOpacity = 0.0
+                }
+            }
+        } else {
+            isShowDetailView = true
+        }
+    }
 }
+
 struct LogInViewPreviews: PreviewProvider {
     static var previews: some View {
         LoginView()
+    }
+}
+
+struct ShakeEffect: GeometryEffect {
+    var amount: CGFloat = 10
+    var shakesPerUnit = 3
+    var animatableData: CGFloat
+    
+    init(shake: Bool) {
+        self.animatableData = shake ? 1 : 0
+    }
+    
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        let progress = sin(animatableData * .pi * CGFloat(shakesPerUnit))
+        return ProjectionTransform(CGAffineTransform(translationX: amount * progress, y: 0))
     }
 }
